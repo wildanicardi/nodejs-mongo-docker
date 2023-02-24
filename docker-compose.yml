@@ -1,0 +1,27 @@
+version: "3.8"
+services:
+  mongodb:
+    image: 'mongo'
+    volumes:
+      - data:/data/db
+    networks:
+      - nginx-proxy-manager_default
+    environment:
+      MONGO_INITDB_DATABASE: course-goals
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    container_name: mongodb
+    restart: always
+  backend:
+    image: 'ali1999/nodejs-backend-goals-api:latest'
+    container_name: backend
+    networks:
+      - nginx-proxy-manager_default
+    restart: always
+    environment:
+      MONGODB_NAME: course-goals
+networks:
+  nginx-proxy-manager_default:
+    external: true
+volumes:
+  data:
